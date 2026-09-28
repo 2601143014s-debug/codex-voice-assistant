@@ -18,7 +18,7 @@ internal sealed class SileroVoiceActivityDetector : IDisposable
 
     public SileroVoiceActivityDetector(
         string modelPath,
-        float threshold = 0.42f)
+        float threshold = 0.32f)
     {
         _threshold = threshold;
         using var options = new SessionOptions

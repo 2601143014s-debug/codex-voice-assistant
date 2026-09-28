@@ -62,12 +62,12 @@ public sealed class VoiceActivitySegmenter : IDisposable
 
             var activeThreshold = Math.Max(
                 _threshold,
-                Math.Min(0.06, _noiseFloor * 3.2));
+                Math.Min(0.025, _noiseFloor * 2.0));
             var voiceDetected = _silero?.IsSpeech(frame.Samples)
                                 ?? frame.Level >= activeThreshold;
             var audibleSpeech = frame.Level >= Math.Max(
-                0.0015,
-                Math.Min(0.012, _noiseFloor * 1.8));
+                0.0005,
+                Math.Min(0.008, _noiseFloor * 1.4));
             var isSpeech = voiceDetected && audibleSpeech;
 
             if (_utterance.Count == 0)

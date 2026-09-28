@@ -81,7 +81,6 @@ public sealed class AssistantHost : IAsyncDisposable
                 _settings.TranscriptionProvider,
                 "sensevoice",
                 StringComparison.OrdinalIgnoreCase)
-            && SenseVoiceTranscriber.IsAvailable
                 ? new SenseVoiceTranscriber()
                 : new WhisperTranscriber(
                     model,
@@ -412,6 +411,8 @@ public sealed class AssistantHost : IAsyncDisposable
                     vadThreshold = _settings.VadThreshold,
                     transcriptionProvider =
                         _settings.TranscriptionProvider,
+                    transcriptionEngine =
+                        _transcriber?.GetType().Name ?? "none",
                 });
             lock (_healthSync)
             {

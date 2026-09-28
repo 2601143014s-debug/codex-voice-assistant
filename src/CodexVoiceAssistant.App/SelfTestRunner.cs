@@ -123,10 +123,9 @@ internal static class SelfTestRunner
             var model = ResolveModel(
                 "ggml-large-v3-turbo-q8_0.bin");
             var useSenseVoice = string.Equals(
-                    settings.TranscriptionProvider,
-                    "sensevoice",
-                    StringComparison.OrdinalIgnoreCase)
-                && SenseVoiceTranscriber.IsAvailable;
+                settings.TranscriptionProvider,
+                "sensevoice",
+                StringComparison.OrdinalIgnoreCase);
             await using ITranscriber transcriber = useSenseVoice
                 ? new SenseVoiceTranscriber()
                 : new WhisperTranscriber(

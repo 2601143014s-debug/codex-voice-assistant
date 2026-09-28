@@ -19,7 +19,7 @@ public sealed class AppSettings
         Path.Combine(
             Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments),
             "Codex");
-    public double VadThreshold { get; set; } = 0.005;
+    public double VadThreshold { get; set; } = 0.0015;
     public int SilenceMilliseconds { get; set; } = 650;
     public int MaxUtteranceSeconds { get; set; } = 20;
     public int LargeModelThresholdSeconds { get; set; } = 4;
