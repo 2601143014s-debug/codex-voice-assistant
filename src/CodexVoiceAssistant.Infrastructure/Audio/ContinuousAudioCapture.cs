@@ -209,11 +209,15 @@ public sealed class ContinuousAudioCapture : IAsyncDisposable
                                 ?? new float[FrameSamples];
                 _apm.ProcessRender(reference);
                 var processed = _apm.ProcessCapture(raw);
+                var referenceLevel = CalculateLevel(reference);
+                var analyzed = referenceLevel > 0.003
+                    ? processed
+                    : raw;
                 FrameAvailable?.Invoke(
                     new AudioFrame(
-                        processed,
+                        analyzed,
                         timestamp,
-                        CalculateLevel(processed)));
+                        CalculateLevel(analyzed)));
             }
         }
     }

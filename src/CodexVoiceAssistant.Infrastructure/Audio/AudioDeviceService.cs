@@ -26,9 +26,13 @@ public static class AudioDeviceService
             {
                 volume.Mute = false;
             }
-            if (volume.MasterVolumeLevelScalar < 0.98f)
+            if (volume.MasterVolumeLevelScalar < 0.60f)
             {
-                volume.MasterVolumeLevelScalar = 1.0f;
+                volume.MasterVolumeLevelScalar = 0.62f;
+            }
+            else if (volume.MasterVolumeLevelScalar > 0.70f)
+            {
+                volume.MasterVolumeLevelScalar = 0.62f;
             }
         }
         catch

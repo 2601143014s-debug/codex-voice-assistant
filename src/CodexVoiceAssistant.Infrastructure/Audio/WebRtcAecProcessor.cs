@@ -14,14 +14,14 @@ internal sealed class WebRtcAecProcessor : IDisposable
         apmConfig.SetEchoCanceller(true, mobileMode: false);
         apmConfig.SetNoiseSuppression(
             true,
-            NoiseSuppressionLevel.High);
+            NoiseSuppressionLevel.Low);
         apmConfig.SetGainController1(
             true,
             GainControlMode.AdaptiveDigital,
-            targetLevelDbfs: -3,
-            compressionGainDb: 18,
+            targetLevelDbfs: -6,
+            compressionGainDb: 12,
             enableLimiter: true);
-        apmConfig.SetHighPassFilter(true);
+        apmConfig.SetHighPassFilter(false);
         apmConfig.SetPipeline(
             sampleRate,
             multiChannelRender: false,
