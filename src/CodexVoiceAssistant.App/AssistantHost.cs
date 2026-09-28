@@ -196,11 +196,33 @@ public sealed class AssistantHost : IAsyncDisposable
             + $"speaker='{renderDevice.FriendlyName}'.");
         _healthMicrophone = captureDevice.FriendlyName;
         _healthSpeaker = renderDevice.FriendlyName;
-        await Task.Run(
-                () => _capture.Start(
-                    _settings.CaptureDeviceId,
-                    _settings.OutputDeviceId))
-            .WaitAsync(TimeSpan.FromSeconds(15));
+        var captureStart = Task.Run(
+            () => _capture.Start(
+                _settings.CaptureDeviceId,
+                _settings.OutputDeviceId));
+        try
+        {
+            await captureStart.WaitAsync(TimeSpan.FromSeconds(3));
+        }
+        catch (TimeoutException)
+        {
+            _logger.Warning(
+                "Audio capture startup did not return within 3 seconds; "
+                + "continuing because the capture threads are active.");
+            _ = captureStart.ContinueWith(
+                task =>
+                {
+                    if (task.Exception is not null)
+                    {
+                        _logger.Error(
+                            "Deferred audio capture startup failed.",
+                            task.Exception.GetBaseException());
+                    }
+                },
+                CancellationToken.None,
+                TaskContinuationOptions.OnlyOnFaulted,
+                TaskScheduler.Default);
+        }
         _logger.Info("Audio capture started.");
         _running = true;
         _healthStartedAt = DateTimeOffset.UtcNow;

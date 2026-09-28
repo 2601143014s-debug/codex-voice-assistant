@@ -1202,8 +1202,8 @@ function Start-AssistantForSession {
             -Force `
             -ErrorAction SilentlyContinue
         Start-Process `
-            -FilePath (Join-Path $env:SystemRoot "explorer.exe") `
-            -ArgumentList "`"$ExecutablePath`""
+            -FilePath $ExecutablePath `
+            -WindowStyle Hidden
     }
 
     $deadline = [DateTime]::UtcNow.AddSeconds(60)
@@ -1227,6 +1227,7 @@ function Start-AssistantForSession {
 $sessionActive = $false
 $startCompleted = $false
 $nextAttempt = [DateTime]::UtcNow
+$unhealthySince = $null
 
 while ($true) {
     $codexPresent = @(Get-CodexProcesses).Count -gt 0
@@ -1237,6 +1238,7 @@ while ($true) {
         $sessionActive = $false
         $startCompleted = $false
         $nextAttempt = [DateTime]::UtcNow
+        $unhealthySince = $null
         Start-Sleep -Seconds 2
         continue
     }
@@ -1245,6 +1247,29 @@ while ($true) {
         $sessionActive = $true
         $startCompleted = $false
         $nextAttempt = [DateTime]::UtcNow.AddSeconds(10)
+        $unhealthySince = $null
+    }
+
+    if ($startCompleted) {
+        $app = @(Get-AssistantProcesses) |
+            Sort-Object -Property ProcessId -Unique |
+            Select-Object -First 1
+        if ($null -eq $app -or
+            -not (Test-AssistantHealthy -Process $app)) {
+            if ($null -eq $unhealthySince) {
+                $unhealthySince = [DateTime]::UtcNow
+            }
+            elseif ([DateTime]::UtcNow -ge
+                    $unhealthySince.AddSeconds(20)) {
+                Stop-AssistantProcesses
+                $startCompleted = $false
+                $nextAttempt = [DateTime]::UtcNow
+                $unhealthySince = $null
+            }
+        }
+        else {
+            $unhealthySince = $null
+        }
     }
 
     if (-not $startCompleted -and
