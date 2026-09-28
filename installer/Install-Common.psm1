@@ -1118,7 +1118,9 @@ function Set-LogonScheduledTask {
 
         [string]$TaskName = "CodexVoiceAssistant",
 
-        [string]$Delay = "PT5S"
+    [string]$Delay = "PT5S",
+
+    [switch]$UseStartupShortcut
     )
 
     if (-not (Test-Path -LiteralPath $ExecutablePath -PathType Leaf)) {
@@ -1140,6 +1142,15 @@ $ErrorActionPreference = "SilentlyContinue"
 $healthPath = Join-Path `
     $env:LOCALAPPDATA `
     "CodexVoiceAssistant\runtime-health.json"
+
+function Get-CodexProcesses {
+    return @(
+        Get-Process -Name "ChatGPT" -ErrorAction SilentlyContinue |
+            Where-Object {
+                $_.Path -like "*\OpenAI.Codex_*\app\ChatGPT.exe" -or
+                -not [string]::IsNullOrWhiteSpace($_.MainWindowTitle)
+            })
+}
 
 function Get-AssistantProcesses {
     return @(
@@ -1163,62 +1174,87 @@ function Stop-AssistantProcesses {
     }
 }
 
-while ($true) {
-    $codex = Get-Process -Name "ChatGPT" -ErrorAction SilentlyContinue |
-        Where-Object {
-            $_.Path -like "*\OpenAI.Codex_*\app\ChatGPT.exe" `
-            -or -not [string]::IsNullOrWhiteSpace($_.MainWindowTitle)
-        } |
-        Select-Object -First 1
+function Test-AssistantHealthy {
+    param(
+        [Parameter(Mandatory = $true)]
+        [object]$Process
+    )
 
-    if ($null -ne $codex) {
-        Start-Sleep -Seconds 10
-        for ($attempt = 1; $attempt -le 2; $attempt++) {
-            if (@(Get-AssistantProcesses).Count -eq 0) {
-                Start-Process -FilePath $ExecutablePath
-            }
+    if (-not (Test-Path -LiteralPath $healthPath -PathType Leaf)) {
+        return $false
+    }
+    try {
+        $health = Get-Content -LiteralPath $healthPath -Raw |
+            ConvertFrom-Json
+        $updated = [DateTimeOffset]$health.updatedUtc
+        return [int]$health.processId -eq [int]$Process.ProcessId -and
+            $updated -gt [DateTimeOffset]::UtcNow.AddSeconds(-20)
+    }
+    catch {
+        return $false
+    }
+}
 
-            $deadline = [DateTime]::UtcNow.AddSeconds(45)
-            while ([DateTime]::UtcNow -lt $deadline) {
-                $app = @(Get-AssistantProcesses) |
-                    Sort-Object -Property ProcessId -Unique |
-                    Select-Object -First 1
-                if ($null -eq $app) {
-                    break
-                }
+function Start-AssistantForSession {
+    if (@(Get-AssistantProcesses).Count -eq 0) {
+        Remove-Item `
+            -LiteralPath $healthPath `
+            -Force `
+            -ErrorAction SilentlyContinue
+        Start-Process `
+            -FilePath (Join-Path $env:SystemRoot "explorer.exe") `
+            -ArgumentList "`"$ExecutablePath`""
+    }
 
-                if (Test-Path -LiteralPath $healthPath -PathType Leaf) {
-                    try {
-                        $health = Get-Content `
-                            -LiteralPath $healthPath `
-                            -Raw |
-                            ConvertFrom-Json
-                        $updated = [DateTimeOffset]$health.updatedUtc
-                        $started = [DateTimeOffset]$health.startedUtc
-                        $processStart =
-                            [System.Management.ManagementDateTimeConverter]::
-                                ToDateTime(
-                                    [string]$app.CreationDate).
-                                ToUniversalTime()
-                        if ([int]$health.processId -eq
-                                [int]$app.ProcessId -and
-                            $updated -gt [DateTimeOffset]::UtcNow.AddSeconds(-20) -and
-                            $started -ge
-                                [DateTimeOffset]$processStart.AddSeconds(-5)) {
-                            exit 0
-                        }
-                    }
-                    catch {
-                    }
-                }
-
-                Start-Sleep -Seconds 1
-            }
-
-            Stop-AssistantProcesses
-            Start-Sleep -Seconds 3
+    $deadline = [DateTime]::UtcNow.AddSeconds(60)
+    while ([DateTime]::UtcNow -lt $deadline) {
+        $app = @(Get-AssistantProcesses) |
+            Sort-Object -Property ProcessId -Unique |
+            Select-Object -First 1
+        if ($null -eq $app) {
+            return $false
         }
-        exit 1
+        if (Test-AssistantHealthy -Process $app) {
+            return $true
+        }
+        Start-Sleep -Seconds 1
+    }
+
+    Stop-AssistantProcesses
+    return $false
+}
+
+$sessionActive = $false
+$startCompleted = $false
+$nextAttempt = [DateTime]::UtcNow
+
+while ($true) {
+    $codexPresent = @(Get-CodexProcesses).Count -gt 0
+    if (-not $codexPresent) {
+        if ($sessionActive) {
+            Stop-AssistantProcesses
+        }
+        $sessionActive = $false
+        $startCompleted = $false
+        $nextAttempt = [DateTime]::UtcNow
+        Start-Sleep -Seconds 2
+        continue
+    }
+
+    if (-not $sessionActive) {
+        $sessionActive = $true
+        $startCompleted = $false
+        $nextAttempt = [DateTime]::UtcNow.AddSeconds(10)
+    }
+
+    if (-not $startCompleted -and
+        [DateTime]::UtcNow -ge $nextAttempt) {
+        if (Start-AssistantForSession) {
+            $startCompleted = $true
+        }
+        else {
+            $nextAttempt = [DateTime]::UtcNow.AddSeconds(30)
+        }
     }
 
     Start-Sleep -Seconds 2
@@ -1229,10 +1265,46 @@ while ($true) {
         $watcherContent,
         (New-Object System.Text.UTF8Encoding($false)))
 
-    $userId = [System.Security.Principal.WindowsIdentity]::GetCurrent().Name
     $powershell = Join-Path `
         $env:SystemRoot `
         "System32\WindowsPowerShell\v1.0\powershell.exe"
+    if ($UseStartupShortcut) {
+        $startupDirectory = Join-Path `
+            $env:APPDATA `
+            "Microsoft\Windows\Start Menu\Programs\Startup"
+        if (-not (Test-Path `
+                -LiteralPath $startupDirectory `
+                -PathType Container)) {
+            New-Item `
+                -ItemType Directory `
+                -Force `
+                -Path $startupDirectory | Out-Null
+        }
+        $shortcutPath = Join-Path `
+            $startupDirectory `
+            "CodexVoiceAssistant.lnk"
+        $shell = New-Object -ComObject WScript.Shell
+        try {
+            $shortcut = $shell.CreateShortcut($shortcutPath)
+            $shortcut.TargetPath = $powershell
+            $shortcut.Arguments =
+                "-NoProfile -WindowStyle Hidden -ExecutionPolicy Bypass " +
+                "-File `"$watcherPath`" " +
+                "-ExecutablePath `"$normalizedExecutable`""
+            $shortcut.WorkingDirectory = $installRoot
+            $shortcut.WindowStyle = 7
+            $shortcut.Description =
+                "Start Codex Voice Assistant when Codex starts."
+            $shortcut.Save()
+        }
+        finally {
+            [System.Runtime.InteropServices.Marshal]::ReleaseComObject(
+                $shell) | Out-Null
+        }
+        return
+    }
+
+    $userId = [System.Security.Principal.WindowsIdentity]::GetCurrent().Name
     $arguments = "-NoProfile -NonInteractive -WindowStyle Hidden " + "-ExecutionPolicy Bypass -File `"$watcherPath`" " + "-ExecutablePath `"$normalizedExecutable`""
     $action = New-ScheduledTaskAction `
         -Execute $powershell `
@@ -1244,12 +1316,21 @@ while ($true) {
         -UserId $userId `
         -LogonType Interactive `
         -RunLevel Limited
+    $settings = New-ScheduledTaskSettingsSet `
+        -AllowStartIfOnBatteries `
+        -DontStopIfGoingOnBatteries `
+        -StartWhenAvailable `
+        -MultipleInstances IgnoreNew
+    $settings.ExecutionTimeLimit = "PT0S"
+    $settings.RestartCount = 999
+    $settings.RestartInterval = "PT1M"
 
     Register-ScheduledTask `
         -TaskName $TaskName `
         -Action $action `
         -Trigger $trigger `
         -Principal $principal `
+        -Settings $settings `
         -Description "Start Codex Voice Assistant when the Codex desktop app starts." `
         -Force | Out-Null
 }
@@ -1269,6 +1350,33 @@ function Remove-LogonScheduledTask {
         -TaskName $TaskName `
         -Confirm:$false
     return $true
+}
+
+function Remove-LaunchWatcherShortcut {
+    $startupDirectory = Join-Path `
+        $env:APPDATA `
+        "Microsoft\Windows\Start Menu\Programs\Startup"
+    $shortcutPath = Join-Path `
+        $startupDirectory `
+        "CodexVoiceAssistant.lnk"
+    if (-not (Test-Path -LiteralPath $shortcutPath -PathType Leaf)) {
+        return $false
+    }
+
+    $shell = New-Object -ComObject WScript.Shell
+    try {
+        $shortcut = $shell.CreateShortcut($shortcutPath)
+        if ($shortcut.Arguments -notmatch
+            [regex]::Escape("launch-when-codex.ps1")) {
+            return $false
+        }
+        [System.IO.File]::Delete($shortcutPath)
+        return $true
+    }
+    finally {
+        [System.Runtime.InteropServices.Marshal]::ReleaseComObject(
+            $shell) | Out-Null
+    }
 }
 
 function Get-FileSnapshot {
@@ -1636,6 +1744,7 @@ Export-ModuleMember -Function @(
     "Read-JsonFile",
     "Remove-DirectoryTreeSafely",
     "Remove-FileSafely",
+    "Remove-LaunchWatcherShortcut",
     "Remove-StartupRegistrationSafely",
     "Remove-LogonScheduledTask",
     "Restore-CurrentRelease",

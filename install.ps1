@@ -402,15 +402,19 @@ try {
                 -ExpectedInstallRoot $installRoot
             $null = Remove-LogonScheduledTask `
                 -TaskName "CodexVoiceAssistant"
+            $null = Remove-LaunchWatcherShortcut
         }
         else {
             $null = Remove-StartupRegistrationSafely `
                 -ExpectedInstallRoot $installRoot
+            $null = Remove-LogonScheduledTask `
+                -TaskName "CodexVoiceAssistant"
             try {
                 Set-LogonScheduledTask `
                     -ExecutablePath $installedExecutable `
                     -TaskName "CodexVoiceAssistant" `
-                    -Delay "PT5S"
+                    -Delay "PT5S" `
+                    -UseStartupShortcut
             }
             catch {
                 Write-Warning "Unable to register Codex launch watcher: $_"

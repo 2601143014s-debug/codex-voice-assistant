@@ -51,6 +51,8 @@ The rewrite is installed only after the checks below pass.
 - [x] Stop and exit drain capture, ASR, Codex, TTS, and child processes.
 - [x] A second instance signals the first instance and exits.
 - [x] All WPF updates are marshalled to the UI dispatcher.
+- [x] A persistent Startup-folder watcher starts the assistant when Codex
+  appears and stops it when Codex exits.
 
 ## Verification
 

@@ -74,6 +74,9 @@ try {
             -TaskName "CodexVoiceAssistant") {
         Write-Host "Removed logon task."
     }
+    if (Remove-LaunchWatcherShortcut) {
+        Write-Host "Removed launch watcher shortcut."
+    }
 
     if (Test-FileSystemEntry -Path $installRoot) {
         Remove-DirectoryTreeSafely `

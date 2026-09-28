@@ -55,8 +55,9 @@ The installer:
 - installs under `%LOCALAPPDATA%\Programs\CodexVoiceAssistant`;
 - switches the `current` junction atomically;
 - preserves a rollback path for upgrades;
-- registers a hidden sign-in watcher that starts the assistant only after
-  the Codex desktop app appears.
+- installs a hidden Startup-folder watcher that follows the Codex desktop
+  process lifecycle: launching Codex starts the assistant, and closing Codex
+  stops its child workers.
 
 Repair the active release:
 
