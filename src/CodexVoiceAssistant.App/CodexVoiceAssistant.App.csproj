@@ -1,0 +1,34 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <OutputType>WinExe</OutputType>
+    <TargetFramework>net8.0-windows</TargetFramework>
+    <AssemblyName>CodexVoiceAssistant</AssemblyName>
+    <Version>2.0.0</Version>
+    <FileVersion>2.0.0.0</FileVersion>
+    <InformationalVersion>2.0.0</InformationalVersion>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <UseWPF>true</UseWPF>
+    <UseWindowsForms>true</UseWindowsForms>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\CodexVoiceAssistant.Domain\CodexVoiceAssistant.Domain.csproj" />
+    <ProjectReference Include="..\CodexVoiceAssistant.Protocol\CodexVoiceAssistant.Protocol.csproj" />
+    <ProjectReference Include="..\CodexVoiceAssistant.Infrastructure\CodexVoiceAssistant.Infrastructure.csproj" />
+    <ProjectReference Include="..\CodexVoiceAssistant.WhisperWorker\CodexVoiceAssistant.WhisperWorker.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Include="..\CodexVoiceAssistant.Infrastructure\Speech\KokoroWorker.py"
+          Link="KokoroWorker.py"
+          CopyToOutputDirectory="PreserveNewest"
+          CopyToPublishDirectory="PreserveNewest" />
+    <None Include="..\CodexVoiceAssistant.Infrastructure\Speech\SenseVoiceWorker.py"
+          Link="SenseVoiceWorker.py"
+          CopyToOutputDirectory="PreserveNewest"
+          CopyToPublishDirectory="PreserveNewest" />
+  </ItemGroup>
+
+</Project>

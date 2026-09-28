@@ -1,0 +1,22 @@
+{
+  "schemaVersion": 1,
+  "product": "CodexVoiceAssistant",
+  "source": "ggerganov/whisper.cpp",
+  "sourceRevision": "5359861c739e955e79d9a303bcbc70fb988958b1",
+  "models": [
+    {
+      "name": "ggml-large-v3-turbo-q8_0.bin",
+      "url": "https://hf-mirror.com/ggerganov/whisper.cpp/resolve/5359861c739e955e79d9a303bcbc70fb988958b1/ggml-large-v3-turbo-q8_0.bin",
+      "length": 874188075,
+      "sha256": "317eb69c11673c9de1e1f0d459b253999804ec71ac4c23c17ecf5fbe24e259a1",
+      "legacyPath": "models/ggml-large-v3-turbo-q8_0.bin"
+    },
+    {
+      "name": "silero_vad.onnx",
+      "url": "https://hf-mirror.com/onnx-community/silero-vad/resolve/main/onnx/model.onnx",
+      "length": 2243022,
+      "sha256": "a4a068cd6cf1ea8355b84327595838ca748ec29a25bc91fc82e6c299ccdc5808",
+      "legacyPath": "models/silero_vad.onnx"
+    }
+  ]
+}

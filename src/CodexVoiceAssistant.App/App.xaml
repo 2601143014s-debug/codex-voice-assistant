@@ -1,0 +1,12 @@
+<Application x:Class="CodexVoiceAssistant.App.App"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             ShutdownMode="OnExplicitShutdown">
+  <Application.Resources>
+    <SolidColorBrush x:Key="Ink" Color="#F4F0E6" />
+    <SolidColorBrush x:Key="Muted" Color="#9DA9AE" />
+    <SolidColorBrush x:Key="Accent" Color="#FFB54A" />
+    <SolidColorBrush x:Key="Cyan" Color="#64D8D1" />
+    <SolidColorBrush x:Key="Danger" Color="#FF7C6F" />
+  </Application.Resources>
+</Application>

@@ -1,0 +1,80 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.0.31903.59
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{5DE4B504-70BB-4BB6-A085-6DD698E6EE21}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CodexVoiceAssistant.Domain", "src\CodexVoiceAssistant.Domain\CodexVoiceAssistant.Domain.csproj", "{A277531C-9024-4191-90F5-8E77605789CE}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CodexVoiceAssistant.Protocol", "src\CodexVoiceAssistant.Protocol\CodexVoiceAssistant.Protocol.csproj", "{CD47C1BA-7984-4A7B-9AA0-FDA1286D9F3B}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CodexVoiceAssistant.Infrastructure", "src\CodexVoiceAssistant.Infrastructure\CodexVoiceAssistant.Infrastructure.csproj", "{E31A011C-0A1B-4D4B-BD95-E52F51F6AC0B}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CodexVoiceAssistant.App", "src\CodexVoiceAssistant.App\CodexVoiceAssistant.App.csproj", "{D7D71F59-5340-4A8A-91B3-BE5575E2F5A8}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CodexVoiceAssistant.WhisperWorker", "src\CodexVoiceAssistant.WhisperWorker\CodexVoiceAssistant.WhisperWorker.csproj", "{9A6F3C62-0A44-4C64-A8E3-9E9A2D7D7A51}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "tests", "tests", "{017E4194-2AA3-41D7-80F8-54EB07383BB5}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CodexVoiceAssistant.Tests", "tests\CodexVoiceAssistant.Tests\CodexVoiceAssistant.Tests.csproj", "{0473A025-FF47-45C1-B6D9-41C15746D886}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "tools", "tools", "{8BFA5163-1582-482F-9224-C881699ACE43}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CodexVoiceAssistant.ProtocolProbe", "tools\CodexVoiceAssistant.ProtocolProbe\CodexVoiceAssistant.ProtocolProbe.csproj", "{24C00DB0-67AB-4445-9B0E-9476951BEB08}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CodexVoiceAssistant.AudioProbe", "tools\CodexVoiceAssistant.AudioProbe\CodexVoiceAssistant.AudioProbe.csproj", "{D5C6FBBA-A444-486E-97E3-780558C9AF74}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{A277531C-9024-4191-90F5-8E77605789CE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A277531C-9024-4191-90F5-8E77605789CE}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A277531C-9024-4191-90F5-8E77605789CE}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A277531C-9024-4191-90F5-8E77605789CE}.Release|Any CPU.Build.0 = Release|Any CPU
+		{CD47C1BA-7984-4A7B-9AA0-FDA1286D9F3B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{CD47C1BA-7984-4A7B-9AA0-FDA1286D9F3B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{CD47C1BA-7984-4A7B-9AA0-FDA1286D9F3B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{CD47C1BA-7984-4A7B-9AA0-FDA1286D9F3B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E31A011C-0A1B-4D4B-BD95-E52F51F6AC0B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E31A011C-0A1B-4D4B-BD95-E52F51F6AC0B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E31A011C-0A1B-4D4B-BD95-E52F51F6AC0B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E31A011C-0A1B-4D4B-BD95-E52F51F6AC0B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D7D71F59-5340-4A8A-91B3-BE5575E2F5A8}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D7D71F59-5340-4A8A-91B3-BE5575E2F5A8}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D7D71F59-5340-4A8A-91B3-BE5575E2F5A8}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D7D71F59-5340-4A8A-91B3-BE5575E2F5A8}.Release|Any CPU.Build.0 = Release|Any CPU
+		{9A6F3C62-0A44-4C64-A8E3-9E9A2D7D7A51}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{9A6F3C62-0A44-4C64-A8E3-9E9A2D7D7A51}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{9A6F3C62-0A44-4C64-A8E3-9E9A2D7D7A51}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{9A6F3C62-0A44-4C64-A8E3-9E9A2D7D7A51}.Release|Any CPU.Build.0 = Release|Any CPU
+		{0473A025-FF47-45C1-B6D9-41C15746D886}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0473A025-FF47-45C1-B6D9-41C15746D886}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{0473A025-FF47-45C1-B6D9-41C15746D886}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{0473A025-FF47-45C1-B6D9-41C15746D886}.Release|Any CPU.Build.0 = Release|Any CPU
+		{24C00DB0-67AB-4445-9B0E-9476951BEB08}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{24C00DB0-67AB-4445-9B0E-9476951BEB08}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{24C00DB0-67AB-4445-9B0E-9476951BEB08}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{24C00DB0-67AB-4445-9B0E-9476951BEB08}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D5C6FBBA-A444-486E-97E3-780558C9AF74}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D5C6FBBA-A444-486E-97E3-780558C9AF74}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D5C6FBBA-A444-486E-97E3-780558C9AF74}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D5C6FBBA-A444-486E-97E3-780558C9AF74}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{A277531C-9024-4191-90F5-8E77605789CE} = {5DE4B504-70BB-4BB6-A085-6DD698E6EE21}
+		{CD47C1BA-7984-4A7B-9AA0-FDA1286D9F3B} = {5DE4B504-70BB-4BB6-A085-6DD698E6EE21}
+		{E31A011C-0A1B-4D4B-BD95-E52F51F6AC0B} = {5DE4B504-70BB-4BB6-A085-6DD698E6EE21}
+		{D7D71F59-5340-4A8A-91B3-BE5575E2F5A8} = {5DE4B504-70BB-4BB6-A085-6DD698E6EE21}
+		{9A6F3C62-0A44-4C64-A8E3-9E9A2D7D7A51} = {5DE4B504-70BB-4BB6-A085-6DD698E6EE21}
+		{0473A025-FF47-45C1-B6D9-41C15746D886} = {017E4194-2AA3-41D7-80F8-54EB07383BB5}
+		{24C00DB0-67AB-4445-9B0E-9476951BEB08} = {8BFA5163-1582-482F-9224-C881699ACE43}
+		{D5C6FBBA-A444-486E-97E3-780558C9AF74} = {8BFA5163-1582-482F-9224-C881699ACE43}
+	EndGlobalSection
+EndGlobal

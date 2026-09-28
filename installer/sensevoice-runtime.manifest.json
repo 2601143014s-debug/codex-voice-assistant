@@ -1,0 +1,11 @@
+{
+  "schemaVersion": 1,
+  "product": "CodexVoiceAssistant",
+  "version": "sherpa-onnx-1.13.8-win-x64",
+  "archive": "installer/payload/sensevoice-runtime.zip",
+  "length": 10965272,
+  "sha256": "86b5fa8e0f7fd371b5b38f7e8d5fabf6656d7c4e8cdfc89f0cd0eab14434e21e",
+  "requiresPython": false,
+  "targetDirectory": "sensevoice-runtime",
+  "requiredFile": "sherpa_onnx/__init__.py"
+}

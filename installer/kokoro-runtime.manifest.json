@@ -1,0 +1,8 @@
+{
+  "schemaVersion": 1,
+  "product": "CodexVoiceAssistant",
+  "version": "kokoro-onnx-0.6.1-zh-v1.1",
+  "archive": "installer/payload/kokoro-runtime.zip",
+  "length": 163319620,
+  "sha256": "9445434745ff6668bc2238e5003ecbd8a7a15330357bf50c099a77796e2524be"
+}

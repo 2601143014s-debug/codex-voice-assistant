@@ -1,0 +1,27 @@
+{
+  "schemaVersion": 1,
+  "product": "CodexVoiceAssistant",
+  "models": [
+    {
+      "name": "kokoro-v1.1-zh.onnx",
+      "url": "https://hf-mirror.com/onnx-community/Kokoro-82M-v1.1-zh-ONNX/resolve/main/onnx/model.onnx",
+      "length": 339369442,
+      "sha256": "94b973941b1852754f979be5d5e20be666d5c81d9bb886b88ae1dc85c9b895ca",
+      "legacyPath": "work/kokoro-models/kokoro-v1.1-zh.onnx"
+    },
+    {
+      "name": "sensevoice-model.int8.onnx",
+      "url": "https://hf-mirror.com/csukuangfj/sherpa-onnx-sense-voice-zh-en-ja-ko-yue-int8-2025-09-09/resolve/main/model.int8.onnx",
+      "length": 237115547,
+      "sha256": "12ca1a2ae7ecf3e0019ef2822307ee0b5cadc9196569e379b4c4026f8205276d",
+      "legacyPath": "work/sensevoice-model/model.int8.onnx"
+    },
+    {
+      "name": "sensevoice-tokens.txt",
+      "url": "https://hf-mirror.com/csukuangfj/sherpa-onnx-sense-voice-zh-en-ja-ko-yue-int8-2025-09-09/resolve/main/tokens.txt",
+      "length": 315894,
+      "sha256": "f449eb28dc567533d7fa59be34e2abca8784f771850c78a47fb731a31429a1dc",
+      "legacyPath": "work/sensevoice-model/tokens.txt"
+    }
+  ]
+}

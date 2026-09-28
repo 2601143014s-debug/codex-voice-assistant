@@ -1,0 +1,21 @@
+# Build output
+**/bin/
+**/obj/
+installer/.artifacts/
+
+# Local runtime, downloaded models, virtual environments, and diagnostics
+work/
+
+# IDE and user-specific files
+.vs/
+.vscode/
+*.user
+*.suo
+
+# Local settings, logs, recordings, and temporary files
+*.log
+*.tmp
+*.wav
+__pycache__/
+*.pyc
+
