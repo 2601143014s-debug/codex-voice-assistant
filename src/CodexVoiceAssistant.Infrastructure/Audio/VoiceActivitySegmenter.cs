@@ -63,8 +63,11 @@ public sealed class VoiceActivitySegmenter : IDisposable
             var activeThreshold = Math.Max(
                 _threshold,
                 Math.Min(0.025, _noiseFloor * 2.0));
-            var voiceDetected = _silero?.IsSpeech(frame.Samples)
-                                ?? frame.Level >= activeThreshold;
+            var modelDetected = _silero?.IsSpeech(frame.Samples) ?? false;
+            var energyDetected = frame.Level >= Math.Max(
+                _threshold,
+                Math.Min(0.02, _noiseFloor * 2.0));
+            var voiceDetected = modelDetected || energyDetected;
             var audibleSpeech = frame.Level >= Math.Max(
                 0.0005,
                 Math.Min(0.008, _noiseFloor * 1.4));
@@ -74,7 +77,7 @@ public sealed class VoiceActivitySegmenter : IDisposable
             {
                 AddPreRoll(frame.Samples);
                 _speechFrames = isSpeech ? _speechFrames + 1 : 0;
-                if (_speechFrames < 3)
+                if (_speechFrames < 2)
                 {
                     return;
                 }
